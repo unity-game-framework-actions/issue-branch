@@ -10245,7 +10245,7 @@ function getIssue(owner, repo, number) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = getOctokit();
         const response = yield octokit.request(`GET /repos/${owner}/${repo}/issues/${number}`);
-        return response.date;
+        return response.data;
     });
 }
 exports.getIssue = getIssue;
