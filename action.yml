@@ -1,5 +1,5 @@
-name: 'Draft'
-description: 'No description.'
+name: 'Issue Branch'
+description: 'Creates branch based on issue.'
 inputs:
   token:
     description: 'GitHub token used by action.'

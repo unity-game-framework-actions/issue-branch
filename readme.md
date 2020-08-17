@@ -1,3 +1,3 @@
-# draft
+# Issue Branch
 
-No description.
+Creates branch based on issue.
