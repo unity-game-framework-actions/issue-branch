@@ -285,7 +285,7 @@ export async function getIssue(owner: string, repo: string, number: string): Pro
   const octokit = getOctokit()
   const response = await octokit.request(`GET /repos/${owner}/${repo}/issues/${number}`)
 
-  return response.date
+  return response.data
 }
 
 export async function getMilestone(owner: string, repo: string, milestoneNumberOrTitle: string): Promise<any> {
