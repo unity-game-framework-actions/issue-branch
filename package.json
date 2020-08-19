@@ -1,6 +1,7 @@
 {
   "name": "issue-branch",
   "version": "0.1.0",
+  "displayName": "Issue Branch",
   "description": "Creates branch based on issue.",
   "main": "lib/main.js",
   "scripts": {
