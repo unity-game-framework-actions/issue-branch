@@ -1,7 +1,7 @@
 import * as utility from './utility'
 import * as cleanGit from 'clean-git-ref'
 
-export async function createIssueBranch(owner: string, repo: string, number: string, base: string, create: boolean, comment: boolean, config: any): Promise<string> {
+export async function createIssueBranch(owner: string, repo: string, number: string, base: string, create: boolean, comment: boolean, config: any, context: any): Promise<string> {
   const issue = await utility.getIssue(owner, repo, number)
   const name = await getUniqueIssueBranchName(owner, repo, number, issue.title)
 
@@ -10,7 +10,7 @@ export async function createIssueBranch(owner: string, repo: string, number: str
   }
 
   if (comment) {
-    const body = getComment(base, name, config)
+    const body = getComment(base, name, config, context)
 
     await createIssueComment(owner, repo, number, body)
   }
@@ -52,8 +52,9 @@ async function createBranch(owner: string, repo: string, base: string, name: str
   })
 }
 
-function getComment(base: string, branch: string, config: any): string {
+function getComment(base: string, branch: string, config: any, context: any): string {
   const values = {
+    context: context,
     base: base,
     branch: branch
   }
