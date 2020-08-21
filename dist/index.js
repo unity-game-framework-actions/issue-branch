@@ -3801,7 +3801,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createIssueBranch = void 0;
 const utility = __importStar(__webpack_require__(880));
 const cleanGit = __importStar(__webpack_require__(217));
-function createIssueBranch(owner, repo, number, base, create, comment, config) {
+function createIssueBranch(owner, repo, number, base, create, comment, config, context) {
     return __awaiter(this, void 0, void 0, function* () {
         const issue = yield utility.getIssue(owner, repo, number);
         const name = yield getUniqueIssueBranchName(owner, repo, number, issue.title);
@@ -3809,7 +3809,7 @@ function createIssueBranch(owner, repo, number, base, create, comment, config) {
             yield createBranch(owner, repo, base, name);
         }
         if (comment) {
-            const body = getComment(base, name, config);
+            const body = getComment(base, name, config, context);
             yield createIssueComment(owner, repo, number, body);
         }
         return name;
@@ -3846,8 +3846,9 @@ function createBranch(owner, repo, base, name) {
         });
     });
 }
-function getComment(base, branch, config) {
+function getComment(base, branch, config, context) {
     const values = {
+        context: context,
         base: base,
         branch: branch
     };
@@ -5122,7 +5123,8 @@ function run() {
             const comment = core.getInput('comment', { required: true }) === 'true';
             const repository = utility.getRepository();
             const config = yield utility.readConfigAny();
-            const result = yield action.createIssueBranch(repository.owner, repository.repo, issue, base, create, comment, config);
+            const context = yield utility.getContextAny();
+            const result = yield action.createIssueBranch(repository.owner, repository.repo, issue, base, create, comment, config, context);
             yield utility.setOutput(result);
         }
         catch (error) {
@@ -9952,7 +9954,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dispatch = exports.getTagsByBranch = exports.getTags = exports.updateRelease = exports.getReleasesByBranch = exports.getReleases = exports.getRelease = exports.updateContent = exports.getMilestoneIssues = exports.getMilestones = exports.getMilestone = exports.getIssue = exports.containsInBranch = exports.getOctokit = exports.formatDate = exports.getOwnerAndRepo = exports.getRepository = exports.setValue = exports.getValue = exports.indent = exports.formatValues = exports.normalize = exports.setOutputFile = exports.setOutputAction = exports.setOutputByType = exports.setOutput = exports.getInput = exports.getInputAny = exports.parse = exports.parseAny = exports.format = exports.write = exports.writeData = exports.read = exports.readData = exports.readDataAny = exports.getDataAny = exports.readConfig = exports.readConfigAny = exports.merge = exports.exists = void 0;
+exports.dispatch = exports.getTagsByBranch = exports.getTags = exports.updateRelease = exports.getReleasesByBranch = exports.getReleases = exports.getRelease = exports.updateContent = exports.getMilestoneIssues = exports.getMilestones = exports.getMilestone = exports.getIssue = exports.containsInBranch = exports.getOctokit = exports.formatDate = exports.getOwnerAndRepo = exports.getRepository = exports.setValue = exports.getValue = exports.indent = exports.formatValues = exports.normalize = exports.setOutputFile = exports.setOutputAction = exports.setOutputByType = exports.setOutput = exports.getInput = exports.getInputAny = exports.getContextAny = exports.parse = exports.parseAny = exports.format = exports.write = exports.writeData = exports.read = exports.readData = exports.readDataAny = exports.getDataAny = exports.readConfig = exports.readConfigAny = exports.merge = exports.exists = void 0;
 const core = __importStar(__webpack_require__(840));
 const github = __importStar(__webpack_require__(837));
 const fs_1 = __webpack_require__(747);
@@ -10093,6 +10095,14 @@ function parse(value, type) {
     }
 }
 exports.parse = parse;
+function getContextAny() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const context = core.getInput('context', { required: true });
+        const result = yield getDataAny(context);
+        return result.data;
+    });
+}
+exports.getContextAny = getContextAny;
 function getInputAny() {
     return __awaiter(this, void 0, void 0, function* () {
         const input = core.getInput('input', { required: true });

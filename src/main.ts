@@ -12,7 +12,8 @@ async function run(): Promise<void> {
     const comment = core.getInput('comment', {required: true}) === 'true'
     const repository = utility.getRepository()
     const config = await utility.readConfigAny()
-    const result = await action.createIssueBranch(repository.owner, repository.repo, issue, base, create, comment, config)
+    const context = await utility.getContextAny()
+    const result = await action.createIssueBranch(repository.owner, repository.repo, issue, base, create, comment, config, context)
 
     await utility.setOutput(result)
   } catch (error) {
